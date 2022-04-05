@@ -1,0 +1,11 @@
+[33mcommit 115d141a24104c812c719b485c597387810eb658[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: AlbertoBFM <alberto.brandon2@gmail.com>
+Date:   Mon Apr 4 17:24:02 2022 -0400
+
+    creation and configuration of models and migrations
+
+[33mcommit dfd09a632c8226d05b5d62576eacaec392814588[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: AlbertoBFM <alberto.brandon2@gmail.com>
+Date:   Mon Apr 4 15:03:14 2022 -0400
+
+    First commit

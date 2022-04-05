@@ -10,11 +10,11 @@ class Delegate extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lastname',
+        'p_lastname',
         'm_lastname',
-        'name',
+        'names',
         'ci',
-        'f_nac',
+        'd_birth',
         'user_id',
         'university_id',
         'commission_id'

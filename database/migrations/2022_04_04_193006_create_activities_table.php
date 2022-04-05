@@ -15,6 +15,12 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('description');
+            $table->date('date');
+            $table->string('observation');
+            $table->unsignedBigInteger('commission_id');
+            $table->foreign('commission_id')->references('id')->on('commissions');
             $table->timestamps();
         });
     }
