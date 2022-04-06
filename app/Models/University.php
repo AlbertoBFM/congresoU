@@ -11,7 +11,7 @@ class University extends Model
 
     protected $fillable = [
         'name',
-        'shield',
+        'logo',
         'user',
         'password',
     ];
