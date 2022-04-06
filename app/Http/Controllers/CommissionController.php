@@ -16,7 +16,7 @@ class CommissionController extends Controller
     public function index()
     {
         $commissions = Commission::get();
-        return response()->json( $commissions ); 
+        return response()->json( $commissions );
     }
 
     /**
@@ -43,15 +43,11 @@ class CommissionController extends Controller
             "color" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
         ]);
 
-        $name = strtoupper($request->name);
-        $description = strtoupper($request->description);
-        $color = strtoupper($request->color);
-
         try {
             Commission::create([
-                "name" => $name,
-                "description" => $description,
-                "color" => $color,
+                "name" => strtoupper($request->name),
+                "description" => strtoupper($request->description),
+                "color" => strtoupper($request->color),
             ]);
     
             return response()->json([
@@ -103,15 +99,11 @@ class CommissionController extends Controller
             "color" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
         ]);
 
-        $name = strtoupper($request->name);
-        $description = strtoupper($request->description);
-        $color = strtoupper($request->color);
-
         try {
             Commission::find( $id )->fill([
-                "name" => $name,
-                "description" => $description,
-                "color" => $color,
+                "name" => strtoupper($request->name),
+                "description" => strtoupper($request->description),
+                "color" => strtoupper($request->color),
             ])->save();
 
             return response()->json([

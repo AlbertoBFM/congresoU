@@ -15,7 +15,7 @@ class Delegate extends Model
         'names',
         'ci',
         'd_birth',
-        'user_id',
+        'uuid',
         'university_id',
         'commission_id'
     ];

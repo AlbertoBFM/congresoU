@@ -48,13 +48,11 @@ class UniversityController extends Controller
             "password" => "required|string|min:8",
         ]);
 
-        $name = strtoupper($request->name);
-
         if( $request->hasFile( 'logo' ) ){
             $path = $request->logo->store('public/logo');
 
             University::create([
-                "name" => $name,
+                "name" => strtoupper($request->name),
                 "logo" => $path,
                 "user" => $request->user,
                 "password" => Hash::make($request->password),
@@ -107,11 +105,9 @@ class UniversityController extends Controller
             "password" => "required|string|min:8",
         ]);
 
-        $name = strtoupper($request->name);
-
         try {
             University::find( $id )->fill([
-                "name" => $name,
+                "name" => strtoupper($request->name),
                 "user" => $request->user,
                 "password" => Hash::make($request->password),
             ])->save();

@@ -20,7 +20,7 @@ class CreateDelegatesTable extends Migration
             $table->string("names");
             $table->string("ci")->unique();
             $table->date("d_birth");
-            $table->string("user_id", 36);
+            $table->string("uuid", 36);
             $table->unsignedBigInteger("university_id");
             $table->foreign('university_id')->references('id')->on('universities');
             $table->unsignedBigInteger("commission_id");

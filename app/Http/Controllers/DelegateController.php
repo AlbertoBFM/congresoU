@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Delegate;
+use App\Models\University;
+use App\Models\Commission;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class DelegateController extends Controller
     public function index()
     {
         $delegates = Delegate::get();
-        return response()->json($delegates);  
+        return response()->json( $delegates );
     }
 
     /**
@@ -26,7 +28,12 @@ class DelegateController extends Controller
      */
     public function create()
     {
-        //
+        $universities = University::get();
+        $commissions = Commission::get();
+        return response()->json([
+            "universities" => $universities,
+            "commissions" => $commissions
+        ]);
     }
 
     /**
@@ -42,34 +49,30 @@ class DelegateController extends Controller
         $fecha_mayoria_edad = date("Y-m-d", strtotime($fecha_Actual."- 18 year"));
 
         $this->validate( $request, [
-            "p_lastname" => "required|max:50|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
-            "m_lastname" => "required|max:50|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
-            "names" => "required|max:100|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
+            "p_lastname" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "m_lastname" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "names" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
             "ci" => "required|unique:delegates|numeric",
             "d_birth" => "required|before:".$fecha_mayoria_edad,
         ]);
 
-        $p_lastname = strtoupper($request->name);
-        $m_lastname = strtoupper($request->name);
-        $names = strtoupper($request->name);
-
         try {
-            University::create([
-                "p_lastname" => $p_lastname,
-                "m_lastname" => $m_lastname,
-                "names" => $names,
+            Delegate::create([
+                "p_lastname" => strtoupper($request->p_lastname),
+                "m_lastname" => strtoupper($request->m_lastname),
+                "names" => strtoupper($request->names),
                 "ci" => $request->ci,
-                "d_birth" => d_birth,
-                "user_id" => $request->user_id,
+                "d_birth" => $request->d_birth,
+                "uuid" => $request->uuid,
                 "university_id" => $request->university_id,
                 "commission_id" => $request->commission_id 
             ]);
             return response()->json([
-                'message'=>'Universidad registrada correctamente'
+                'message'=>'Delegado/a registrado/a correctamente'
             ]);
-        } catch (\Throwable $th) {
+        } catch (Throwable $e) {
             return response()->json([
-                'message'=>'Error al registrar la universidad'
+                'message' => 'Error al registrar Delegado/a'
             ]);
         }
 
@@ -95,7 +98,15 @@ class DelegateController extends Controller
      */
     public function edit($id)
     {
-        //
+        $delegate = Delegate::find( $id );
+        $universities = University::get();
+        $commissions = Commission::get();
+
+        return response()->json([
+            "delegate" => $delegate,
+            "universities" => $universities,
+            "commissions" => $commissions
+        ]);
     }
 
     /**
@@ -107,7 +118,38 @@ class DelegateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //fecha actual
+        $fecha_Actual = date("Y-m-d");
+        $fecha_mayoria_edad = date("Y-m-d", strtotime($fecha_Actual."- 18 year"));
+
+        $this->validate( $request, [
+            "p_lastname" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "m_lastname" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "names" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "ci" => "required|unique:delegates,ci,".$id."|numeric",
+            "d_birth" => "required|before:".$fecha_mayoria_edad,
+        ]);
+
+        try {
+            Delegate::find( $id )->fill([
+                "p_lastname" => strtoupper($request->p_lastname),
+                "m_lastname" => strtoupper($request->m_lastname),
+                "names" => strtoupper($request->names),
+                "ci" => $request->ci,
+                "d_birth" => $request->d_birth,
+                "uuid" => $request->uuid,
+                "university_id" => $request->university_id,
+                "commission_id" => $request->commission_id 
+            ])->save();
+
+            return response()->json([
+                'message'=>'Delegado/a modificado/a correctamente'
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Error al modificar Delegado/a'
+            ]);
+        }
     }
 
     /**
@@ -118,6 +160,16 @@ class DelegateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $delegate = Delegate::find( $id )->delete();
+            
+            return response()->json([
+                'message'=>'Delegado/a eliminada'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message'=>'Error al eliminar Delegado/a'
+            ]);
+        }
     }
 }
