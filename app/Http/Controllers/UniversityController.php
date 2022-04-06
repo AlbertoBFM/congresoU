@@ -65,7 +65,6 @@ class UniversityController extends Controller
         return response()->json([
             'message'=>'Error al registrar Universidad'
         ]);
-
     }
 
     /**
@@ -146,6 +145,7 @@ class UniversityController extends Controller
         try {
             $university = University::find($id);
             $university->delete();
+            
             return response()->json([
                 'message'=>'Universidad eliminada'
             ]);
