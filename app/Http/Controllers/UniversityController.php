@@ -7,6 +7,7 @@ use App\Models\University;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UniversityController extends Controller
 {
@@ -18,7 +19,8 @@ class UniversityController extends Controller
     public function index()
     {
         $universities = University::get();
-        return response()->json( $universities );    
+        return response()->json( $universities ); 
+           
     }
 
     /**
@@ -40,10 +42,10 @@ class UniversityController extends Controller
     public function store(Request $request)
     {
         $this->validate( $request, [
-            "name" => "required|max:100|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
+            "name" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
             "logo" => "required|image",
-            "user" => "required|string|email|max:255|unique:users",
-            "password" => "required|string|min:8|confirmed",
+            "user" => "required|string|email|max:255",
+            "password" => "required|string|min:8",
         ]);
 
         $name = strtoupper($request->name);
@@ -55,7 +57,7 @@ class UniversityController extends Controller
                 "name" => $name,
                 "logo" => $path,
                 "user" => $request->user,
-                "password" => $request->password,
+                "password" => Hash::make($request->password),
             ]);
 
             return response()->json([
@@ -86,7 +88,7 @@ class UniversityController extends Controller
      */
     public function edit($id)
     {
-        $university = University::where('id', $id);
+        $university = University::find( $id );
         return response()->json( $university ); 
     }
 
@@ -100,29 +102,19 @@ class UniversityController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate( $request, [
-            "name" => "required|max:100|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
-            "logo" => "required|image",
-            "user" => "required|string|email|max:255|unique:users",
-            "password" => "required|string|min:8|confirmed",
+            "name" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "user" => "required|string|email|max:255",
+            "password" => "required|string|min:8",
         ]);
 
         $name = strtoupper($request->name);
 
-        if( $request->hasFile( 'logo' ) ){
-            Storage::delete($request->old_logo);
-            $path = $request->logo->store('public/logo');
-        }
-        else{
-            $path = $request->old_logo;
-        }
         try {
-            $university = University::find($id)([
+            University::find( $id )->fill([
                 "name" => $name,
-                "logo" => $path,
                 "user" => $request->user,
-                "password" => $request->password,
-            ]);
-            $university->save();
+                "password" => Hash::make($request->password),
+            ])->save();
     
             return response()->json([
                 'message'=>'Universidad modificada correctamente'
@@ -144,6 +136,7 @@ class UniversityController extends Controller
     {
         try {
             $university = University::find($id);
+            Storage::delete($university->logo);
             $university->delete();
             
             return response()->json([

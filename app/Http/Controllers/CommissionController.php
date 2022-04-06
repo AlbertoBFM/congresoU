@@ -38,9 +38,9 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         $this->validate( $request, [
-            "name" => "required|max:100|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
-            "description" => "required|max:255|regex:/(^([a-zA-z])[a-zA-z 0-9.,]*([a-zA-Z]*)$)/u",
-            "color" => "required|max:50|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
+            "name" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "description" => "required|max:255|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-Z 0-9.,]*([a-zA-ZÀ-ÿ]*)$)/u",
+            "color" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
         ]);
 
         $name = strtoupper($request->name);
@@ -84,7 +84,7 @@ class CommissionController extends Controller
      */
     public function edit($id)
     {
-        $commission = Commission::where( 'id', $id );
+        $commission = Commission::find( $id );
         return response()->json( $commission );
         
     }
@@ -98,9 +98,9 @@ class CommissionController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate( $request, [
-            "name" => "required|max:100|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
-            "description" => "required|max:255|regex:/(^([a-zA-z])[a-zA-z 0-9.,]*([a-zA-Z]*)$)/u",
-            "color" => "required|max:50|regex:/(^([a-zA-z])[a-zA-z ']*([a-zA-Z]*)$)/u",
+            "name" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "description" => "required|max:255|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-Z 0-9.,]*([a-zA-ZÀ-ÿ]*)$)/u",
+            "color" => "required|max:50|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
         ]);
 
         $name = strtoupper($request->name);
@@ -108,12 +108,11 @@ class CommissionController extends Controller
         $color = strtoupper($request->color);
 
         try {
-            $commission = Commission::find($id)([
+            Commission::find( $id )->fill([
                 "name" => $name,
                 "description" => $description,
                 "color" => $color,
-            ]);
-            $commission->save();
+            ])->save();
 
             return response()->json([
                 'message'=>'Comisión modificada correctamente'
@@ -134,8 +133,7 @@ class CommissionController extends Controller
     public function destroy($id)
     {
         try {
-            $commission = Commission::find($id);
-            $commission->delete();
+            $commission = Commission::find( $id )->delete();
             
             return response()->json([
                 'message'=>'Commission eliminada'
