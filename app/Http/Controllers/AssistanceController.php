@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("America/La_Paz");
+
+use App\Models\Assistance;
+use App\Models\Delegate;
+use App\Models\Activity;
+
 use Illuminate\Http\Request;
 
 class AssistanceController extends Controller
@@ -13,7 +19,8 @@ class AssistanceController extends Controller
      */
     public function index()
     {
-        //
+        $assistances = Assistance::get();
+        return response()->json( $assistances );
     }
 
     /**
@@ -23,7 +30,12 @@ class AssistanceController extends Controller
      */
     public function create()
     {
-        //
+        $delegates = Delegate::get();
+        $activities = Activity::get();
+        return response()->json([
+            "delegates" => $delegates,
+            "activities" => $activities
+        ]);
     }
 
     /**
@@ -34,7 +46,26 @@ class AssistanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $fecha_Actual = date("Y-m-d");
+ 
+         $this->validate( $request, [
+            "check_in_time" => "required|after:".date("Y-m-d 00:00:00")
+         ]);
+ 
+        try {
+            Assistance::create([
+                "check_in_time" => $request->check_in_time,
+                "delegate_id" => $request->delegate_id,
+                "activity_id" => $request->activity_id   
+            ]);
+            return response()->json([
+                'message'=>'Asistencia registrada correctamente'
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Error al registrar Asistencia'
+            ]);
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource( 'activity', ActivityController::class );
 Route::resource( 'archive', ArchiveController::class );
-Route::resource( 'assitance', AssistanceController::class );
+Route::resource( 'assistance', AssistanceController::class );
 Route::resource( 'commission', CommissionController::class );
 Route::resource( 'delegate', DelegateController::class );
 Route::resource( 'university', UniversityController::class );

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("America/La_Paz");
+
 use App\Models\Commission;
 
 use Illuminate\Http\Request;

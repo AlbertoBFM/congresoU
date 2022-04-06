@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("America/La_Paz");
+
 use App\Models\Delegate;
 use App\Models\University;
 use App\Models\Commission;
@@ -75,8 +77,6 @@ class DelegateController extends Controller
                 'message' => 'Error al registrar Delegado/a'
             ]);
         }
-
-
     }
 
     /**

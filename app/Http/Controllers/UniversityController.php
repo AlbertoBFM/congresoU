@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("America/La_Paz");
+
 use App\Models\University;
 
 use Illuminate\Support\Str;
@@ -19,8 +21,7 @@ class UniversityController extends Controller
     public function index()
     {
         $universities = University::get();
-        return response()->json( $universities ); 
-           
+        return response()->json( $universities );  
     }
 
     /**

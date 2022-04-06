@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("America/La_Paz");
+
+use App\Models\Archive;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ArchiveController extends Controller
@@ -13,7 +18,8 @@ class ArchiveController extends Controller
      */
     public function index()
     {
-        //
+        $archives = Archive::get();
+        return response()->json( $archives );  
     }
 
     /**
@@ -23,7 +29,8 @@ class ArchiveController extends Controller
      */
     public function create()
     {
-        //
+        $activities = Activity::get();
+        return response()->json( $activities );
     }
 
     /**
@@ -34,7 +41,31 @@ class ArchiveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate( $request, [
+            "path" => "required|mimes:pdf,jpg,jpeg,png|size:5000",
+            "name" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "title" => "required|max:100|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+            "description" => "required|max:200|regex:/(^([a-zA-ZÀ-ÿ])[a-zA-ZÀ-ÿ ']*([a-zA-ZÀ-ÿ]*)$)/u",
+        ]);
+
+        if( $request->hasFile( 'path' ) ){
+            $path = $request->path->store('public/files');
+
+            Archive::create([
+                "path" => $path,
+                "name" => $request->name,
+                "title" => $request->title,
+                "description" => $request->description,
+                "activity_id" => $request->activity_id
+            ]);
+
+            return response()->json([
+                'message'=>'Archivo guardado correctamente'
+            ]);
+        }
+        return response()->json([
+            'message'=>'Error al guardar Universidad'
+        ]);
     }
 
     /**
