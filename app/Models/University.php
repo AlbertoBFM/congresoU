@@ -12,8 +12,8 @@ class University extends Model
     protected $fillable = [
         'name',
         'logo',
-        'user',
-        'password',
+        // 'user',
+        // 'password',
     ];
 
     public function delegate(){

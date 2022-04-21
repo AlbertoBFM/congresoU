@@ -64,7 +64,7 @@ class ArchiveController extends Controller
             ]);
         }
         return response()->json([
-            'message'=>'Error al guardar Universidad'
+            'message'=>'Error al guardar archivo'
         ]);
     }
 

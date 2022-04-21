@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 date_default_timezone_set("America/La_Paz");
 
 use App\Models\University;
+use App\Models\User;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -55,8 +56,16 @@ class UniversityController extends Controller
             University::create([
                 "name" => strtoupper($request->name),
                 "logo" => $path,
-                "user" => $request->user,
-                "password" => Hash::make($request->password),
+                // "user" => $request->user,
+                // "password" => Hash::make($request->password),
+            ]);
+
+            $university_recup = University::where("name",strtoupper($request->name))->get();
+
+            User::create([
+                'user' => $request->user,
+                'password' => Hash::make($request->password),
+                'university_id' => $university_recup[0]["id"]
             ]);
 
             return response()->json([

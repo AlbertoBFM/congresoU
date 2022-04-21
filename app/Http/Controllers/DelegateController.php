@@ -20,7 +20,8 @@ class DelegateController extends Controller
     public function index()
     {
         $delegates = Delegate::get();
-        return response()->json( $delegates );
+        // return response()->json( $delegates );
+        return view("delegate.index", compact("delegates"));
     }
 
     /**
