@@ -2,24 +2,15 @@
 @section('content')
 
 <div class="container">
-        <form
-            action="{{ route('delegate.index') }}"
-            method="GET"
-        >
+        <form>
             <div class="mb-3">
                 <label for="names" class="form-label">Nombres de Delegados</label>
                 <input 
                     class="form-control" 
-                    id="names"
-                    name="names" 
-                    type="text"
-                    value="{{ $names }}"
-                >
-                <input 
-                    class="form-control" 
                     id="names" 
-                    type="submit"
-                    value="Buscar"
+                    type="text"
+                    placeholder="JORGE CAMPOS"
+                    wire:model="searchTerm"
                 >
                 {{-- <div id="namesHelp" class="form-text">Error en nombre</div> --}}
             </div>
@@ -36,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($delegates as $delegate)
+                @foreach($delegates as $delegate)
                     <tr>
                         <td> {{ $delegate->p_lastname }} </td>
                         <td> {{ $delegate->m_lastname }} </td>
@@ -44,21 +35,11 @@
                         <td> {{ $delegate->ci }} </td>
                         <td> {{ $delegate->d_birth }} </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td 
-                            colspan="5"
-                            class="text-center"
-                        >
-                            {{ __("Ningun Delegado coincide") }}
-                        </td>
-                    </tr>
-                @endforelse
-                
+                @endforeach
             </tbody>
         </table>
         <div class="p-4">
-            {{ $delegates->appends(["names" => $names]) }}
+            {{ $delegates->links() }}
         </div>
     </div>
 @endsection

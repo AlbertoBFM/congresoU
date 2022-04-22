@@ -10,6 +10,8 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\UniversityController;
 
+use App\Http\Controllers\ReportController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,3 +33,6 @@ Route::resource( 'assistance', AssistanceController::class );
 Route::resource( 'commission', CommissionController::class );
 Route::resource( 'delegate', DelegateController::class );
 Route::resource( 'university', UniversityController::class );
+
+Route::get('/reportDelegatesU', [\App\Http\Controllers\ReportController::class, 'reportDelegatesU'])->name('reportDelegatesU');
+Route::get('/reportDelegatesC', [\App\Http\Controllers\ReportController::class, 'reportDelegatesC'])->name('reportDelegatesC');

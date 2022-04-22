@@ -12,16 +12,31 @@ use Illuminate\Http\Request;
 
 class DelegateController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $delegates = Delegate::get();
+        // $delegates = Delegate::get();
         // return response()->json( $delegates );
-        return view("delegate.index", compact("delegates"));
+        // return view("delegate.index", compact("delegates"));
+        
+        $names = trim($request->get('names'));
+        
+        $delegates = Delegate::where('names','LIKE','%'.$names.'%')->paginate(3);
+        return view('delegate.index',[
+            'delegates' => $delegates,
+            'names' => $names
+        ]);
+
     }
 
     /**

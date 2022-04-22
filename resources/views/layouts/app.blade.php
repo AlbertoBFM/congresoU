@@ -34,13 +34,15 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav">
                         <li class="nav-item">
-                            <a
-                                class="nav-link active" 
-                                aria-current="page" 
-                                href="{{ route('delegate.index') }}"
-                                >
-                                {{ __("Delegados") }}
-                            </a>
+                            @if(isset(Auth::user()->id))
+                                <a
+                                    class="nav-link active" 
+                                    aria-current="page" 
+                                    href="{{ route('delegate.index') }}"
+                                    >
+                                    {{ __("Delegados") }}
+                                </a>
+                            @endif
                         </li>
                     </ul>
 
@@ -87,5 +89,6 @@
             @yield('content')
         </main>
     </div>
+
 </body>
 </html>

@@ -24,4 +24,8 @@ class Delegate extends Model
         return $this->belongsTo(University::class);
     }
 
+    public function delegate(){
+        return $this->belongsTo(Delegate::class);
+    }
+
 }

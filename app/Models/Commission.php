@@ -15,4 +15,8 @@ class Commission extends Model
         'color'
     ];
 
+    public function delegate(){
+        return $this->hasMany(Delegate::class);
+    }
+
 }
